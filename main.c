@@ -2,16 +2,32 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define a 5.0
+
+#define initialLength 2.0
+#define ScaleFactor a/initialLength
+#define iX
 
 GLfloat angle =0;
-float a = 5.0;
-float initial = 1.0;
+GLfloat theScale = 1.0;
+float b=70.0;
+int flag=0;
+int i =1;
 
 
 void RotateFunc(){
     angle=angle+0.1;
     if (angle>360){
         angle=0;
+    }
+
+    theScale= theScale + i*0.005;
+    if(theScale>=2){
+        i=-1;
+    }
+
+    if(theScale<=1){
+        i=1;
     }
 
     glutPostRedisplay(); //From here call the displayFunc
@@ -40,7 +56,7 @@ void myinit(void){
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-25, 25.0, -25, 25, -25.0, 25.0);
+    glOrtho(-15, 15.0, -15, 15, -100.0, 100.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -49,55 +65,58 @@ void display( void )
 {
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    //glTranslatef(-cameraX, -cameraY, 0.0f);
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //glTranslatef(250,250,00);
-    glRotatef(angle, 1.0, 1.0, 1.0);
+    glTranslatef(0 ,0 , -b);
+    glRotatef(angle, 1.0, 2.0, 2.0);
+    glScalef(theScale,theScale,theScale);
 
     glPushMatrix(); //front plane //Red //First Scale than Rotate then Translate
-    glScalef(2.5, 2.5, 1);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor/2);
     glColor3f(1.0, 0.0, 0.0);
     glCallList(1);
     glPopMatrix();
 
     glPushMatrix(); //rear plane //Blue
-    glTranslatef(0.0,0.0,-5);
-    glScalef(2.5, 2.5, 1);
+    glTranslatef(0.0,0.0,-a);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor/2);
     glColor3f(0.0, 0.0, 1.0);
     glCallList(1);
     glPopMatrix();
 
-    glPushMatrix(); //Right side //Green
-    glTranslatef(1.5, 0.0, -1.5);
+    glPushMatrix(); //Right side -Green
+    glTranslatef(ScaleFactor, 0.0, -ScaleFactor);
     glRotatef(90, 0.0, 1.0, 0.0);
-    glScalef(2.5, 2.5, 1);
+    glTranslatef(-ScaleFactor/2,0.0,-ScaleFactor*initialLength/2);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor);
     glColor3f(0.0, 1.0, 0.0);
     glCallList(1);
     glPopMatrix();
 
     glPushMatrix(); //Left side -Cyan
-    glTranslatef(-3.5, 0.0, -1.5);
+    glTranslatef(-ScaleFactor, 0.0, -ScaleFactor);
     glRotatef(90, 0.0, 1.0, 0.0);
-    glScalef(2.5, 2.5, 1);
+    glTranslatef(-ScaleFactor/2,0.0,-ScaleFactor*initialLength/2);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor);
     glColor3f(0.0, 1.0, 1.0);
     glCallList(1);
     glPopMatrix();
 
     glPushMatrix(); //Top side -Yellow
-    glTranslatef(0.0, 3.5, -1.5);
+    glTranslatef(ScaleFactor/2, ScaleFactor, -ScaleFactor/2);
     glRotatef(90, 1.0, 0.0, 0.0);
-    glScalef(2.5, 2.5, 1);
+    glTranslatef(-ScaleFactor/2,0.0,-ScaleFactor*initialLength/2);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor);
     glColor3f(1.0, 1.0, 0.0);
     glCallList(1);
     glPopMatrix();
 
     glPushMatrix(); //Bottom side -Pink
-    glTranslatef(0.0, -1.5, -1.5);
+    glTranslatef(ScaleFactor/2, -ScaleFactor, -ScaleFactor/2);
     glRotatef(90, 1.0, 0.0, 0.0);
-    glScalef(2.5, 2.5, 1);
+    glTranslatef(-ScaleFactor/2,0.0,-ScaleFactor*initialLength/2);
+    glScalef(ScaleFactor, ScaleFactor, ScaleFactor);
     glColor3f(1.0, 0.0, 1.0);
     glCallList(1);
     glPopMatrix();
