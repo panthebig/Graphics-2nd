@@ -8,11 +8,14 @@
 #define ScaleFactor a/initialLength
 #define iX
 
-GLfloat angle =0;
+GLfloat angle = 0;
 GLfloat theScale = 1.0;
+GLfloat rotator = 0;
+float radius=5;
 float b=70.0;
 int flag=0;
-int i =1;
+int i = 1;
+int j = 1;
 
 
 void RotateFunc(){
@@ -29,6 +32,15 @@ void RotateFunc(){
     if(theScale<=1){
         i=1;
     }
+
+
+
+    rotator= rotator + 0.005;
+    if (rotator>360){
+        rotator=0;
+    }
+
+
 
     glutPostRedisplay(); //From here call the displayFunc
 
@@ -68,7 +80,7 @@ void display( void )
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(0 ,0 , -b);
+    glTranslatef(cos(rotator)*radius ,sin(rotator)*radius, -8*b/10);
     glRotatef(angle, 1.0, 2.0, 2.0);
     glScalef(theScale,theScale,theScale);
 
