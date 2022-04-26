@@ -20,7 +20,7 @@ int MenuFlag = 0;
 
 
 void RotateFunc(){
-    angle=angle+0.1;
+    angle=angle+0.2;
     if (angle>360){
         angle=0;
     }
@@ -42,10 +42,6 @@ void RotateFunc(){
 
 
     glutPostRedisplay(); //From here call the displayFunc
-}
-
-void drawPlane(){
-    glCallList(1);
 }
 
 void myinit(void){
@@ -79,25 +75,27 @@ void display( void )
     glLoadIdentity();
 
 
-    if (MenuFlag==0){
+    switch(MenuFlag){
+    case 0:
         glTranslatef(0 ,0 , -b);
         glRotatef(angle, 1.0, 2.0, 2.0);
         glScalef(theScale,theScale,theScale);
-    }
-    else{
+        break;
+    case 1:
         glTranslatef(cos(rotator)*radius ,sin(rotator)*radius, -8*b/10);
         glRotatef(angle, 1.0, 2.0, 2.0);
         glScalef(theScale,theScale,theScale);
+        break;
     }
 
-
-    glPushMatrix(); //front plane //Red //First Scale than Rotate then Translate
+    //  !!!First Scale than Rotate then Translate!!!
+    glPushMatrix(); //front plane -Red
     glScalef(ScaleFactor, ScaleFactor, ScaleFactor/2);
     glColor3f(1.0, 0.0, 0.0);
     glCallList(1);
     glPopMatrix();
 
-    glPushMatrix(); //rear plane //Blue
+    glPushMatrix(); //rear plane -Blue
     glTranslatef(0.0,0.0,-a);
     glScalef(ScaleFactor, ScaleFactor, ScaleFactor/2);
     glColor3f(0.0, 0.0, 1.0);
@@ -174,7 +172,6 @@ int main(int argc, char** argv)
     glEnable(GL_DEPTH_TEST);
 
     glutDisplayFunc(display);
-
 
     glutIdleFunc(RotateFunc); //When idle call RotateFunc
 
