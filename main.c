@@ -16,6 +16,7 @@ float b=70.0;
 int flag=0;
 int i = 1;
 int j = 1;
+int MenuFlag = 0;
 
 
 void RotateFunc(){
@@ -34,16 +35,13 @@ void RotateFunc(){
     }
 
 
-
     rotator= rotator + 0.005;
     if (rotator>360){
         rotator=0;
     }
 
 
-
     glutPostRedisplay(); //From here call the displayFunc
-
 }
 
 void drawPlane(){
@@ -80,9 +78,18 @@ void display( void )
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(cos(rotator)*radius ,sin(rotator)*radius, -8*b/10);
-    glRotatef(angle, 1.0, 2.0, 2.0);
-    glScalef(theScale,theScale,theScale);
+
+    if (MenuFlag==0){
+        glTranslatef(0 ,0 , -b);
+        glRotatef(angle, 1.0, 2.0, 2.0);
+        glScalef(theScale,theScale,theScale);
+    }
+    else{
+        glTranslatef(cos(rotator)*radius ,sin(rotator)*radius, -8*b/10);
+        glRotatef(angle, 1.0, 2.0, 2.0);
+        glScalef(theScale,theScale,theScale);
+    }
+
 
     glPushMatrix(); //front plane //Red //First Scale than Rotate then Translate
     glScalef(ScaleFactor, ScaleFactor, ScaleFactor/2);
@@ -138,6 +145,23 @@ void display( void )
 
  }
 
+ void project_Menu(int id){
+    switch (id)
+    {
+    case 1:
+        MenuFlag = 0;
+        break;
+    case 2:
+        MenuFlag = 1;
+        break;
+    case 3:
+        exit(0);
+        break;
+    }
+
+    glutPostRedisplay();
+ }
+
 
 int main(int argc, char** argv)
 {
@@ -155,6 +179,12 @@ int main(int argc, char** argv)
     glutIdleFunc(RotateFunc); //When idle call RotateFunc
 
     myinit();
+
+    glutCreateMenu(project_Menu);
+        glutAddMenuEntry("Case A",1);
+        glutAddMenuEntry("Case B",2);
+        glutAddMenuEntry("Exit the Application",3);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 
     glutMainLoop();
 }
